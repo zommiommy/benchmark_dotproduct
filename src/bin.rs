@@ -30,6 +30,33 @@ println!("{},{},{},{}", stringify!($f), $size, moment1, moment2 - (moment1 * mom
 }
 
 pub fn main() {
+    let a = (0..8).map(|x| x as f32).collect::<Vec<_>>();
+    let b = (0..8).map(|x| x as f32).collect::<Vec<_>>();
+
+    benchmark!(
+        8, a, b, 
+        native,
+        native_with_size_hint,
+        simd,
+        native_par,
+        simd_par
+    );
+
+    for i in 1..100 {
+        let size = 32 * i;
+        let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+        let b = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+
+        benchmark!(
+            size, a, b, 
+            native,
+            native_with_size_hint,
+            simd,
+            simd_unrolled4,
+            native_par
+        );
+    }
+
     for i in 1..100_000 {
         let size = i * 32 * rayon::current_num_threads();
         let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
