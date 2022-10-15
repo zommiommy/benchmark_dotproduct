@@ -59,8 +59,42 @@ pub fn main() {
         );
     }
 
-    for i in 1..100_000 {
+    for i in 1..1_000 {
         let size = i * 32 * rayon::current_num_threads();
+        let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+        let b = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+
+        benchmark!(
+            size, a, b, 
+            native,
+            native_with_size_hint,
+            simd,
+            simd_unrolled4,
+            native_par,
+            simd_par,
+            simd_par_better
+        );
+    }
+
+    for i in 1..1_000 {
+        let size = i * 320 * rayon::current_num_threads();
+        let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+        let b = (0..size).map(|x| x as f32).collect::<Vec<_>>();
+
+        benchmark!(
+            size, a, b, 
+            native,
+            native_with_size_hint,
+            simd,
+            simd_unrolled4,
+            native_par,
+            simd_par,
+            simd_par_better
+        );
+    }
+
+    for i in 1..1_000 {
+        let size = i * 3200 * rayon::current_num_threads();
         let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
         let b = (0..size).map(|x| x as f32).collect::<Vec<_>>();
 
