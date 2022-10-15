@@ -1,4 +1,7 @@
 #![feature(portable_simd)]
+use std::simd::f32x8;
+use std::convert::TryInto;
+use std::simd::{StdFloat, SimdFloat};
 use rayon::prelude::*;
 
 pub fn native(vec1: &[f32], vec2: &[f32]) -> f32 {
@@ -19,10 +22,6 @@ pub fn native_with_size_hint(vec1: &[f32], vec2: &[f32]) -> f32 {
     vec1.iter().zip(vec2.iter()).map(|(a, b)| a * b).sum()
 }
 
-
-use std::simd::f32x8;
-use std::convert::TryInto;
-use std::simd::{StdFloat, SimdFloat};
 pub fn simd(vec1: &[f32], vec2: &[f32]) -> f32 {
     if vec1.len() != vec2.len() {
         unsafe{
@@ -113,6 +112,6 @@ pub fn simd_par_better(vec1: &[f32], vec2: &[f32]) -> f32 {
     let chunk_size = vec1.len() / n_threads;
 
     (0..n_threads).map(|i| {
-        simd_par(&vec1[(i * chunk_size)..((i + 1) * chunk_size)], &vec2[(i * chunk_size)..((i + 1) * chunk_size)]) 
+        simd_unrolled4(&vec1[(i * chunk_size)..((i + 1) * chunk_size)], &vec2[(i * chunk_size)..((i + 1) * chunk_size)]) 
     }).sum()
 }
