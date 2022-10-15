@@ -106,10 +106,8 @@ pub fn simd_par_better(vec1: &[f32], vec2: &[f32]) -> f32 {
 
     let n_threads = rayon::current_num_threads();
 
-    assert!(vec1.len() % n_threads == 0);
-    assert!(vec2.len() % n_threads == 0);
-    assert!(vec1.len() % 32 == 0);
-    assert!(vec2.len() % 32 == 0);
+    assert!(vec1.len() % (n_threads * 32) == 0);
+    assert!(vec2.len() % (n_threads * 32) == 0);
 
     let chunk_size = vec1.len() / n_threads;
 
