@@ -31,7 +31,7 @@ println!("{},{},{},{}", stringify!($f), $size, moment1, moment2 - (moment1 * mom
 
 pub fn main() {
     for i in 1..100_000 {
-        let size = 32 * 12 * i;
+        let size = i * 32 * rayon::current_num_threads();
         let a = (0..size).map(|x| x as f32).collect::<Vec<_>>();
         let b = (0..size).map(|x| x as f32).collect::<Vec<_>>();
 
