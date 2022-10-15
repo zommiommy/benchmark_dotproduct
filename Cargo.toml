@@ -7,3 +7,11 @@ edition = "2021"
 
 [dependencies]
 rayon = "1.5.3"
+
+[lib]
+name = "dotproduct"
+path = "src/lib.rs"
+
+[[bin]]
+name = "benchmark"
+path = "src/bin.rs"
