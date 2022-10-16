@@ -7,6 +7,10 @@ edition = "2021"
 
 [dependencies]
 rayon = "1.5.3"
+#blas = "0.20"
+#cblas = "0.4.0"
+#intel-mkl-src = "0.8"
+ndarray = "0.15.6"
 
 [lib]
 name = "dotproduct"

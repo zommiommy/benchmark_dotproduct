@@ -4,6 +4,7 @@ use std::simd::{f32x8, f32x16};
 use std::convert::TryInto;
 use std::simd::{StdFloat, SimdFloat};
 use rayon::prelude::*;
+use ndarray::{ArrayView, IntoDimension};
 
 pub fn native(vec1: &[f32], vec2: &[f32]) -> f32 {
     vec1.iter().zip(vec2.iter()).map(|(a, b)| a * b).sum()
@@ -13,7 +14,6 @@ pub fn native_par(vec1: &[f32], vec2: &[f32]) -> f32 {
     vec1.par_iter().zip(vec2.par_iter()).map(|(a, b)| a * b).sum()
 }
 
-
 pub fn native_with_size_hint(vec1: &[f32], vec2: &[f32]) -> f32 {
     if vec1.len() != vec2.len() {
         unsafe{
@@ -22,6 +22,37 @@ pub fn native_with_size_hint(vec1: &[f32], vec2: &[f32]) -> f32 {
     }
     vec1.iter().zip(vec2.iter()).map(|(a, b)| a * b).sum()
 }
+
+pub fn ndarray_dot(vec1: &[f32], vec2: &[f32]) -> f32 {
+    if vec1.len() != vec2.len() {
+        unsafe{
+            std::hint::unreachable_unchecked();
+        }
+    }
+    unsafe{
+        let vec1 = ArrayView::from_shape_ptr((vec1.len(),).into_dimension(), vec1.as_ptr());
+        let vec2 = ArrayView::from_shape_ptr((vec2.len(),).into_dimension(), vec2.as_ptr());
+        vec1.dot(&vec2)
+    }
+}
+/*
+pub fn blas_sdot(vec1: &[f32], vec2: &[f32]) -> f32 {
+    if vec1.len() != vec2.len() {
+        unsafe{
+            std::hint::unreachable_unchecked();
+        }
+    }
+    unsafe{blas::sdot(vec1.len() as _, vec1, 1, vec2, 1)}
+}
+
+pub fn cblas_sdot(vec1: &[f32], vec2: &[f32]) -> f32 {
+    if vec1.len() != vec2.len() {
+        unsafe{
+            std::hint::unreachable_unchecked();
+        }
+    }
+    unsafe{cblas::sdot(vec1.len() as _, vec1, 1, vec2, 1)}
+} */
 
 pub fn simd_f32x8(vec1: &[f32], vec2: &[f32]) -> f32 {
     if vec1.len() != vec2.len() {

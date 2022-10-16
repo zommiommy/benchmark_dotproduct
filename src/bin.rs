@@ -40,7 +40,10 @@ pub fn main() {
             native,
             native_with_size_hint,
             simd_f32x8,
-            native_par
+            native_par,
+            //blas_sdot,
+            //cblas_sdot,
+            ndarray_dot
         );
     }
 
@@ -55,7 +58,10 @@ pub fn main() {
             native_with_size_hint,
             simd_f32x8,
             simd_unrolled4_f32x8,
-            native_par
+            native_par,
+            //blas_sdot,
+            //cblas_sdot,
+            ndarray_dot
         );
     }
 
@@ -74,7 +80,10 @@ pub fn main() {
             simd_unrolled4_f32x16,
             native_par,
             simd_par,
-            simd_par_better
+            simd_par_better,
+            //blas_sdot,
+            //cblas_sdot,
+            ndarray_dot
         );
     }
 
@@ -93,7 +102,10 @@ pub fn main() {
             simd_unrolled4_f32x16,
             native_par,
             simd_par,
-            simd_par_better
+            simd_par_better,
+            //blas_sdot,
+            //cblas_sdot,
+            ndarray_dot
         );
     }
 
@@ -112,7 +124,10 @@ pub fn main() {
             simd_unrolled4_f32x16,
             native_par,
             simd_par,
-            simd_par_better
+            simd_par_better,
+            //blas_sdot,
+            //cblas_sdot,
+            ndarray_dot
         );
     }
 }
