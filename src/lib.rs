@@ -1,4 +1,5 @@
 #![feature(portable_simd)]
+#![feature(array_chunks)]
 use std::simd::{f32x8, f32x16};
 use std::convert::TryInto;
 use std::simd::{StdFloat, SimdFloat};
@@ -30,9 +31,9 @@ pub fn simd_f32x8(vec1: &[f32], vec2: &[f32]) -> f32 {
     }
 
     let mut total = f32x8::splat(0.0);
-    for (a, b) in vec1.chunks(8).zip(vec2.chunks(8)) {
-        let a = f32x8::from_array(a.try_into().unwrap());
-        let b = f32x8::from_array(b.try_into().unwrap());
+    for (a, b) in vec1.array_chunks::<8>().zip(vec2.array_chunks::<8>()) {
+        let a = f32x8::from_array(*a);
+        let b = f32x8::from_array(*b);
 
         total = f32x8::mul_add(a, b, total);
     }
@@ -48,9 +49,9 @@ pub fn simd_f32x16(vec1: &[f32], vec2: &[f32]) -> f32 {
     }
 
     let mut total = f32x16::splat(0.0);
-    for (a, b) in vec1.chunks(16).zip(vec2.chunks(16)) {
-        let a = f32x16::from_array(a.try_into().unwrap());
-        let b = f32x16::from_array(b.try_into().unwrap());
+    for (a, b) in vec1.array_chunks::<16>().zip(vec2.array_chunks::<16>()) {
+        let a = f32x16::from_array(*a);
+        let b = f32x16::from_array(*b);
 
         total = f32x16::mul_add(a, b, total);
     }
@@ -157,7 +158,7 @@ pub fn simd_par_better(vec1: &[f32], vec2: &[f32]) -> f32 {
 
     let chunk_size = vec1.len() / n_threads;
 
-    (0..n_threads).map(|i| {
+    (0..n_threads).into_par_iter().map(|i| {
         simd_unrolled4_f32x8(&vec1[(i * chunk_size)..((i + 1) * chunk_size)], &vec2[(i * chunk_size)..((i + 1) * chunk_size)]) 
     }).sum()
 }

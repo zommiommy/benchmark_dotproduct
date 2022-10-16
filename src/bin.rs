@@ -10,7 +10,7 @@ pub fn rdtsc() -> u64 {
 macro_rules! benchmark {
     ($size: expr, $a:expr, $b: expr, $($f:expr),*) => {$(
 
-let n = 1_000;
+let n = 100;
 let mut moment1 = 0;
 let mut moment2 = 0;
 
